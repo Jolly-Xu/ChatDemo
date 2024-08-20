@@ -1,0 +1,115 @@
+.sider_container {
+    height: 100vh;
+    background-color: #f7f7f7;
+  
+    .logo {
+      height: 10%;
+      padding: 10px;
+      width: 100%;
+      display: flex;
+      box-sizing: border-box;
+      align-items: center;
+  
+      .icon {
+        width: 25%;
+        margin-left: 5px;
+      }
+      .name {
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+    }
+
+    .menuBox{
+        margin-bottom: 6rem;
+    }
+
+    .footerBox{
+        height: 5rem;
+        width: 100%;
+        background-color: #f7f7f7;
+        z-index: 9999;
+        .userBox{
+            width: 100%;
+            height: 70%;
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+            padding-left: 15px;
+            padding-right: 10px;
+            .userInfo{
+                display: flex;
+                width: 60%;
+                align-items: center;
+                .userName{
+                    font-weight: 600;
+                    margin-left: 10px;
+                    text-align: center;
+                }
+            }
+        }
+
+        .userOpt{
+            display: flex;
+            justify-content: space-around;
+            width: 40%;
+        }
+    }
+  }
+  
+  ::v-deep(.n-menu .n-menu-item-content.n-menu-item-content--selected::before) {
+  
+    background-color: rgba($color: #4a2a94, $alpha: 0.2) !important;
+  }
+  ::v-deep(.n-menu .n-menu-item-content.n-menu-item-content--selected .n-menu-item-content__icon
+  ) {
+    color: #837d93;
+    font-weight: 600;
+  }
+  
+  ::v-deep(.n-menu .n-menu-item-content.n-menu-item-content--selected .n-menu-item-content__icon
+  ) {
+    color: #4a2a94;
+    font-weight: 600;
+  }
+  
+  ::v-deep(
+  .n-menu .n-menu-item-content:not(.n-menu-item-content--disabled).n-menu-item-content--selected:hover .n-menu-item-content-header a ) {
+    color: #4a2a94;
+    font-weight: 600;
+  }
+  
+  ::v-deep(
+  .n-menu .n-menu-item-content:not(.n-menu-item-content--disabled).n-menu-item-content--selected:hover .n-menu-item-content__icon ) {
+    color: #4a2a94;
+    font-weight: 600;
+  }
+  
+  
+  ::v-deep(.n-menu .n-menu-item-content.n-menu-item-content--selected .n-menu-item-content-header a){
+    color: #4a2a94;
+    font-weight: 600;
+  }
+  
+  ::deep(.n-menu .n-menu-item-content.n-menu-item-content--selected .n-menu-item-content-header){
+    opacity: 0.2;
+    background-color: #4a2a94 !important;
+  }
+  
+
+  .login_box{
+    width: 25%;
+    .card-tabs{
+      .forgetPassword{
+        // background-color: #4a2a94;
+        padding-right: 5px;
+        padding-bottom: 5px;
+        text-align: right;
+        font-size: 0.8rem;
+        color: #8c8c8c;
+        span:hover{
+          color: #000;
+        }
+      }
+    }
+  }

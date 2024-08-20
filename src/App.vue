@@ -1,30 +1,30 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <n-message-provider>
+    <n-layout position="absolute" has-sider="true">
+      <Sider />
+      <n-layout class="main_container">
+        <router-view />
+      </n-layout>
+    </n-layout>
+  </n-message-provider>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import Sider from "@/components/sider.vue";
+import { GameControllerOutline, GameController } from "@vicons/ionicons5";
+export default {
+  components: {
+    Sider,
+    GameController,
+    GameControllerOutline,
+  },
+};
+</script>
 
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+<style lang="scss" scoped>
+.main_container {
+  background-color: #f7f7f7;
+  padding: 20px 10px 20px 0;
+  box-sizing: border-box;
 }
 </style>

@@ -1,0 +1,21 @@
+.home {
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+  .main_box {
+    display: flex;
+    .top_box{
+      width: 100%;
+      height: auto;
+      border-bottom: 1px solid #efefef;
+      padding-bottom: 0.6rem;
+      span{
+          font-size: 1.5rem;
+          font-weight: 600;
+      }
+    }
+  }
+}
