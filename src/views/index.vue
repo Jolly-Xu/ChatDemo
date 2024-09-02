@@ -313,7 +313,9 @@
           </n-tab-pane>
           <n-tab-pane style="height: 100%" name="tab2" tab="工具">
             <div class="databasesBox">
-          <div class="topBox">
+
+          <!-- 上传数据库 -->
+          <!-- <div class="topBox">
             <div class="line"></div>
             <div class="word">上传数据库</div>
           </div>
@@ -333,7 +335,7 @@
                 点击或者拖动数据库文件到该区域来上传，限制200MB
               </n-text>
             </n-upload-dragger>
-          </n-upload>
+          </n-upload> -->
 
           <div class="topBox">
             <div class="line"></div>
@@ -357,7 +359,9 @@
             </n-upload-dragger>
           </n-upload>
 
-          <n-spin >
+          <!-- <n-spin > -->
+
+
             <div v-if="!databasesIsConn" class="topBox">
             <div class="line"></div>
             <div class="word">数据库连接</div>
@@ -425,7 +429,7 @@
           </div>
 
           </div>
-          </n-spin>
+          <!-- </n-spin> -->
 
           
 
