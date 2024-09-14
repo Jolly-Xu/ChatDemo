@@ -1,13 +1,15 @@
 // index 页面的api请求
-
+const baseFetchUrl = "http://10.32.7.45:8000"
 import request from "./request";
 
-export function chat2test(params) {
+export function chat2test(data) {
 	const controller = new AbortController();
     const signal = controller.signal;
-    return [fetch("http://127.0.0.1:8080/chat",{
-        method: 'Get',
-        signal}),controller];
+    return [fetch(baseFetchUrl + "/chat/",{
+        method: 'Post',
+        signal,
+		body:JSON.stringify(data),
+		}),controller];
 }
 
 export function postrule(data) {

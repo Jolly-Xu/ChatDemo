@@ -144,7 +144,6 @@
                     </n-tag>
                   </n-popselect>
 
-
                   <n-popselect
                     v-model:value="currentMethod"
                     :options="methondsoptions"
@@ -168,7 +167,6 @@
                       </template>
                     </n-tag>
                   </n-popselect>
-
 
                   <n-upload-trigger #="{ handleClick }" abstract>
                     <n-tag
@@ -296,163 +294,170 @@
                 </div>
               </div>
               <div class="newchat_box">
-                <n-infinite-scroll style="height: 100%" :distance="10" @load="handleLoad">
-                <div
-                  v-for="(msg, index) in chathistory"
-                  :key="index"
-                  class="chat_item"
+                <n-infinite-scroll
+                  style="height: 100%"
+                  :distance="10"
+                  @load="handleLoad"
                 >
-                  <div class="left_tag"></div>
-                  <div class="content">
-                    {{ msg.content }}
+                  <div
+                    v-for="(msg, index) in chathistory"
+                    :key="index"
+                    class="chat_item"
+                  >
+                    <div class="left_tag"></div>
+                    <div class="content">
+                      {{ msg.content }}
+                    </div>
                   </div>
-                </div>
-              </n-infinite-scroll>
+                </n-infinite-scroll>
               </div>
             </div>
           </n-tab-pane>
           <n-tab-pane style="height: 100%" name="tab2" tab="工具">
             <div class="databasesBox">
-
-          <!-- 上传数据库 -->
-          <!-- <div class="topBox">
-            <div class="line"></div>
-            <div class="word">上传数据库</div>
-          </div>
-
-          <n-upload
-            multiple
-            directory-dnd
-            action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
-            :max="1"
-          >
-            <n-upload-dragger>
-              <div style="margin-bottom: 5px">
-                <n-icon size="20" :depth="1"  :component="ArchiveOutline">
-                </n-icon>
+              <!-- <div class="topBox">
+                <div class="line"></div>
+                <div class="word">上传数据库</div>
               </div>
-              <n-text style="font-size: 0.9rem">
-                点击或者拖动数据库文件到该区域来上传，限制200MB
-              </n-text>
-            </n-upload-dragger>
-          </n-upload> -->
 
-          <div class="topBox">
-            <div class="line"></div>
-            <div class="word">上传外部知识库</div>
-          </div>
+              <n-upload
+                multiple
+                directory-dnd
+                action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
+                :max="1"
+              >
+                <n-upload-dragger>
+                  <div style="margin-bottom: 5px">
+                    <n-icon size="20" :depth="1" :component="ArchiveOutline">
+                    </n-icon>
+                  </div>
+                  <n-text style="font-size: 0.9rem">
+                    点击或者拖动数据库文件到该区域来上传，限制200MB
+                  </n-text>
+                </n-upload-dragger>
+              </n-upload> -->
+              
 
-          <n-upload
-            multiple
-            directory-dnd
-            action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
-            :max="1"
-          >
-            <n-upload-dragger>
-              <div style="margin-bottom: 5px">
-                <n-icon size="20" :depth="3" :component="ArchiveOutline">
-                </n-icon>
+              <div v-if="!databasesIsConn" class="topBox">
+                <div class="line"></div>
+                <div class="word">数据库连接</div>
               </div>
-              <n-text style="font-size: 0.9rem">
-                点击或者拖动外部知识库文件到该区域来上传,限制200MB
-              </n-text>
-            </n-upload-dragger>
-          </n-upload>
 
-          <!-- <n-spin > -->
+              <div v-if="!databasesIsConn" class="databasesConn">
+                <div class="inputbox">
+                  <span>数据库:</span
+                  ><n-select
+                    class="inp"
+                    v-model:value="databasesConnMsg.databases"
+                    :options="databasesSel"
+                    placeholder="选择数据库"
+                  />
+                </div>
+
+                <div class="inputbox">
+                  <span>名称:</span
+                  ><n-input
+                    class="inp"
+                    v-model:value="databasesConnMsg.connName"
+                    type="text"
+                    placeholder="连接名: Test"
+                  />
+                </div>
+                <div class="inputbox">
+                  <span>主机:</span
+                  ><n-input
+                    class="inp"
+                    v-model:value="databasesConnMsg.hostname"
+                    type="text"
+                    placeholder="主机地址: http://localhost"
+                  />
+                </div>
+                <div class="inputbox">
+                  <span>端口:</span
+                  ><n-input
+                    class="inp"
+                    v-model:value="databasesConnMsg.port"
+                    type="text"
+                    placeholder="端口号: 3306"
+                  />
+                </div>
+                <div class="inputbox">
+                  <span>用户名:</span
+                  ><n-input
+                    class="inp"
+                    v-model:value="databasesConnMsg.username"
+                    type="text"
+                    placeholder="数据库用户名: root"
+                  />
+                </div>
+                <div class="inputbox">
+                  <span>密码:</span
+                  ><n-input
+                    class="inp"
+                    v-model:value="databasesConnMsg.password"
+                    type="password"
+                    placeholder="数据库登录密码"
+                  />
+                </div>
+                <!-- <div class="inputbox">
+                  <span>数据库:</span
+                  ><n-input
+                    class="inp"
+                    v-model:value="value"
+                    type="text"
+                    placeholder="数据库名: test"
+                  />
+                </div> -->
+
+                <div class="bottomBox">
+                  <n-button tertiary round><span>清空</span> </n-button>
+                  <n-button round color="#b771f8" @click="connect2DataBases">
+                    连接
+                  </n-button>
+                </div>
+              </div>
+
+              <div v-if="databasesIsConn" class="topBox">
+                <div class="line"></div>
+                <div class="word">数据库</div>
+              </div>
+
+              <div v-if="databasesIsConn" class="databasesSelBox">
+                <n-tree
+                  block-line
+                  expand-on-click
+                  :data="data"
+                  :node-props="nodeProps"
+                />
+              </div>
 
 
-            <div v-if="!databasesIsConn" class="topBox">
-            <div class="line"></div>
-            <div class="word">数据库连接</div>
-          </div>
+              <div class="topBox">
+                <div class="line"></div>
+                <div class="word">上传外部知识库</div>
+              </div>
 
-          <div v-if="!databasesIsConn" class="databasesConn">
-            <div class="inputbox">
-              <span>名称:</span
-              ><n-input
-                class="inp"
-                v-model:value="value"
-                type="text"
-                placeholder="连接名: Test"
-              />
+              <n-upload
+                multiple
+                directory-dnd
+                :action="uploadKnowledge"
+                method="Post"
+              >
+                <n-upload-dragger>
+                  <div style="margin-bottom: 5px">
+                    <n-icon size="20" :depth="3" :component="ArchiveOutline">
+                    </n-icon>
+                  </div>
+                  <n-text style="font-size: 0.9rem">
+                    点击或者拖动外部知识库文件到该区域来上传,限制200MB
+                  </n-text>
+                </n-upload-dragger>
+              </n-upload>
+
+
             </div>
-            <div class="inputbox">
-              <span>主机:</span
-              ><n-input
-                class="inp"
-                v-model:value="value"
-                type="text"
-                placeholder="主机地址: http://localhost"
-              />
-            </div>
-            <div class="inputbox">
-              <span>端口:</span
-              ><n-input
-                class="inp"
-                v-model:value="value"
-                type="text"
-                placeholder="端口号: 3306"
-              />
-            </div>
-            <div class="inputbox">
-              <span>用户名:</span
-              ><n-input
-                class="inp"
-                v-model:value="value"
-                type="text"
-                placeholder="数据库用户名: root"
-              />
-            </div>
-            <div class="inputbox">
-              <span>密码:</span
-              ><n-input
-                class="inp"
-                v-model:value="value"
-                type="text"
-                placeholder="数据库登录密码"
-              />
-            </div>
-            <div class="inputbox">
-              <span>数据库:</span
-              ><n-input
-                class="inp"
-                v-model:value="value"
-                type="text"
-                placeholder="数据库名: test"
-              />
-            </div>
-
-            <div class="bottomBox">
-            <n-button tertiary round><span>清空</span>  </n-button>
-            <n-button round color="#b771f8" @click="connect2DataBases"> 连接 </n-button>
-          </div>
-
-          </div>
-          <!-- </n-spin> -->
-
-          
-
-
-          <div v-if="databasesIsConn" class="topBox">
-            <div class="line"></div>
-            <div class="word">数据库</div>
-          </div>
-        
-          <div v-if="databasesIsConn" class="databasesSelBox">
-            <n-tree
-              block-line
-              expand-on-click
-              :data="data"
-              :node-props="nodeProps"
-            />
-          </div>
-        </div>
-
-
           </n-tab-pane>
         </n-tabs>
-
       </div>
     </div>
     <div></div>
@@ -473,6 +478,7 @@ import MarkdownItTOC from "markdown-it-toc-done-right";
 import mk from "markdown-it-katex";
 import { chat2test } from "@/api/index";
 import { useMessage, NIcon } from "naive-ui";
+import { uploadKnowledgeurl } from "../api/request";
 // import { useNotification } from "naive-ui";
 
 import {
@@ -480,7 +486,7 @@ import {
   FileTrayFullOutline,
   ImageOutline,
   LogoElectron,
-  ArchiveOutline ,
+  ArchiveOutline,
   ListCircleOutline,
   PaperPlane,
   Folder,
@@ -551,6 +557,20 @@ const fileListRef = ref([
   },
 ]);
 
+// 数据库选择
+const databasesSel = ref([
+{
+          label: 'Mysql',
+          value: 'song1'
+        },
+        {
+          label: 'SqlLight',
+          value: 'song2'
+        },
+
+])
+
+
 // 对话历史数据
 const chathistory = ref([
   {
@@ -593,7 +613,6 @@ const chathistory = ref([
     avatar:
       "https://t12.baidu.com/it/u=3889196102,199724547&fm=30&app=106&f=JPEG?w=640&h=640&s=6B243A62FEF71BB350A990CB0000A0A1",
   },
-  
 ]);
 
 // 对话数据
@@ -715,8 +734,8 @@ let status = true;
 
 const data = [
   {
-    key: "文件夹",
-    label: "文件夹",
+    key: "Demo",
+    label: "Demo",
     prefix: () =>
       h(NIcon, null, {
         default: () => h(Folder),
@@ -724,7 +743,7 @@ const data = [
     children: [
       {
         key: "空的",
-        label: "空的",
+        label: "Database01",
         disabled: true,
         prefix: () =>
           h(NIcon, null, {
@@ -733,14 +752,14 @@ const data = [
       },
       {
         key: "我的文件",
-        label: "我的文件",
+        label: "Database02",
         prefix: () =>
           h(NIcon, null, {
             default: () => h(Folder),
           }),
         children: [
           {
-            label: "template.txt",
+            label: "table01",
             key: "template.txt",
             prefix: () =>
               h(NIcon, null, {
@@ -862,10 +881,14 @@ function sendChatMsg() {
     window.$message.warning("不能发送空信息！");
     return;
   }
-
+  // 请求参数
+  let requestbody = {
+    content:sendMsgContent.value,
+    userid:"1767767",
+  };
   packgeSendMsg();
   // 获取两个变量
-  const [func, c] = chat2test();
+  const [func, c] = chat2test(requestbody);
   controller = c;
 
   // 请求
@@ -939,6 +962,10 @@ async function beforeUpload(data) {
   return true;
 }
 
+// 文件上传地址
+// 上传知识库地址
+const uploadKnowledge = uploadKnowledgeurl;
+
 // 标识文件是否已经在列表中，进行样式变换
 const fileIsExist = ref(false);
 
@@ -959,15 +986,26 @@ function fileUpdate(list) {
   }
 }
 
-function handleLoad(){
+function handleLoad() {
   console.log(111);
 }
 
 // 数据库连接
-const databasesIsConn = ref(false)
+const databasesIsConn = ref(false);
 
-function connect2DataBases(){
-    databasesIsConn.value = true;
+const databasesConnMsg = ref({
+  databases:null,
+  connName:"",
+  hostname:"",
+  port:"",
+  username:"",
+  password:"",
+})
+
+function connect2DataBases() {
+  console.log(databasesConnMsg);
+  
+  databasesIsConn.value = true;
 }
 
 export default defineComponent({
@@ -980,13 +1018,16 @@ export default defineComponent({
     return {
       sendChatMsg,
       connect2DataBases,
+      databasesConnMsg,
       databasesIsConn,
+      uploadKnowledge,
       changeborder,
       chatref,
       Navigate,
       handleLoad,
       FileTrayFullOutline,
       ChevronDownOutline,
+      databasesSel,
       currentMethod,
       LogoElectron,
       beforeUpload,
@@ -994,7 +1035,7 @@ export default defineComponent({
       currentModel,
       chathistory,
       send_ready,
-      ArchiveOutline ,
+      ArchiveOutline,
       methondsoptions,
       data,
       fileUpdate,

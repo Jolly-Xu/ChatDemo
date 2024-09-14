@@ -15,6 +15,8 @@ const request = axios.create({
 	}
 })
 
+export const uploadKnowledgeurl = "http://10.32.5.81:8000/upload/"
+
 // // 请求拦截器
 // request.interceptors.request.use(
 // 	config => {
