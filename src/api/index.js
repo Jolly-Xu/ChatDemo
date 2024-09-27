@@ -1,5 +1,5 @@
 // index 页面的api请求
-const baseFetchUrl = "http://10.32.7.45:8000"
+const baseFetchUrl = "http://10.32.22.196:8000"
 import request from "./request";
 
 export function chat2test(data) {
@@ -20,10 +20,20 @@ export function postrule(data) {
 	})
 }
 
-export function updaterule(id, data) {
+export function ConnDatabases(data) {
 	return request({
 		method: 'post',
 		data: data,
-		url: '/rules/${id}'
+		url: '/connect_sql/'
 	})
 }
+
+export function getTablesByBasename(data) {
+	return request({
+		method: 'post',
+		data: data,
+		url: '/connect_sql/'
+	})
+}
+
+

@@ -336,7 +336,6 @@
                   </n-text>
                 </n-upload-dragger>
               </n-upload> -->
-              
 
               <div v-if="!databasesIsConn" class="topBox">
                 <div class="line"></div>
@@ -426,11 +425,10 @@
                 <n-tree
                   block-line
                   expand-on-click
-                  :data="data"
+                  :data="databasesMeau"
                   :node-props="nodeProps"
                 />
               </div>
-
 
               <div class="topBox">
                 <div class="line"></div>
@@ -453,8 +451,6 @@
                   </n-text>
                 </n-upload-dragger>
               </n-upload>
-
-
             </div>
           </n-tab-pane>
         </n-tabs>
@@ -476,7 +472,7 @@ import MarkdownItTasklists from "markdown-it-task-lists";
 import hljs from "highlight.js/lib/common";
 import MarkdownItTOC from "markdown-it-toc-done-right";
 import mk from "markdown-it-katex";
-import { chat2test } from "@/api/index";
+import { chat2test, ConnDatabases,getTablesByBasename} from "@/api/index";
 import { useMessage, NIcon } from "naive-ui";
 import { uploadKnowledgeurl } from "../api/request";
 // import { useNotification } from "naive-ui";
@@ -559,17 +555,19 @@ const fileListRef = ref([
 
 // 数据库选择
 const databasesSel = ref([
-{
-          label: 'Mysql',
-          value: 'song1'
-        },
-        {
-          label: 'SqlLight',
-          value: 'song2'
-        },
-
-])
-
+  {
+    label: "Mysql",
+    value: "mysql",
+  },
+  {
+    label: "SqlLight",
+    value: "SqlLight",
+  },
+  {
+    label: "Postgresql",
+    value: "postgresql",
+  },
+]);
 
 // 对话历史数据
 const chathistory = ref([
@@ -732,45 +730,9 @@ const currentMethod = ref("Agent");
 // 标识是否上滑的状态
 let status = true;
 
-const data = [
-  {
-    key: "Demo",
-    label: "Demo",
-    prefix: () =>
-      h(NIcon, null, {
-        default: () => h(Folder),
-      }),
-    children: [
-      {
-        key: "空的",
-        label: "Database01",
-        disabled: true,
-        prefix: () =>
-          h(NIcon, null, {
-            default: () => h(Folder),
-          }),
-      },
-      {
-        key: "我的文件",
-        label: "Database02",
-        prefix: () =>
-          h(NIcon, null, {
-            default: () => h(Folder),
-          }),
-        children: [
-          {
-            label: "table01",
-            key: "template.txt",
-            prefix: () =>
-              h(NIcon, null, {
-                default: () => h(FileTrayFullOutline),
-              }),
-          },
-        ],
-      },
-    ],
-  },
-];
+// 树状文件
+const databasesMeau = ref([
+]);
 
 // 窗口状态判断，是否上滑动作，停止自动向下滑
 function scrollEevent(event) {
@@ -883,8 +845,8 @@ function sendChatMsg() {
   }
   // 请求参数
   let requestbody = {
-    content:sendMsgContent.value,
-    userid:"1767767",
+    content: sendMsgContent.value,
+    userid: "1767767",
   };
   packgeSendMsg();
   // 获取两个变量
@@ -994,19 +956,71 @@ function handleLoad() {
 const databasesIsConn = ref(false);
 
 const databasesConnMsg = ref({
-  databases:null,
-  connName:"",
-  hostname:"",
-  port:"",
-  username:"",
-  password:"",
-})
+  databases: "mysql",
+  connName: "test",
+  hostname: "localhost",
+  port: "3306",
+  username: "byun",
+  password: "",
+});
 
 function connect2DataBases() {
-  console.log(databasesConnMsg);
-  
+  ConnDatabases(databasesConnMsg.value).then((res) => {
+    let r = res.data;
+    console.log(r);
+    
+    let s = "" + r;
+    s = s.replaceAll(/'/g, '"');
+    let data = JSON.parse(s);
+    let databases = [
+      {
+        key: data.key,
+        label: data.key,
+        prefix: () =>
+          h(NIcon, null, {
+            default: () => h(Folder),
+          }),
+        children: [],
+      },
+    ];
+
+    for (let index = 0; index < data.children.length; index++) {
+      databases[0].children.push({
+        key: data.children[index],
+        label: data.children[index],
+        prefix: () =>
+          h(NIcon, null, {
+            default: () => h(Folder),
+          }),
+          children:[]
+      });
+    }
+
+    databasesMeau.value = databases;
+  });
+
   databasesIsConn.value = true;
 }
+
+// 数据库树状结构绑定属性（点击事件）
+
+// const
+
+const nodeProps = ({ option }) => {
+  return {
+    onClick() {
+      let databaseName = option.key
+      let data = {
+        databaseName:databaseName
+      }
+      getTablesByBasename(data).then(res=>{
+          console.log(res);
+      })
+      console.log(databaseName);
+      
+    },
+  };
+};
 
 export default defineComponent({
   setup() {
@@ -1021,6 +1035,7 @@ export default defineComponent({
       databasesConnMsg,
       databasesIsConn,
       uploadKnowledge,
+      nodeProps,
       changeborder,
       chatref,
       Navigate,
@@ -1037,7 +1052,7 @@ export default defineComponent({
       send_ready,
       ArchiveOutline,
       methondsoptions,
-      data,
+      databasesMeau,
       fileUpdate,
       ListCircleOutline,
       fileIsExist,
