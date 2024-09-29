@@ -475,7 +475,7 @@ import MarkdownItTasklists from "markdown-it-task-lists";
 import hljs from "highlight.js/lib/common";
 import MarkdownItTOC from "markdown-it-toc-done-right";
 import mk from "markdown-it-katex";
-import { chat2test, ConnDatabases, getTablesByBasename } from "@/api/index";
+import { chat2test, ConnDatabases, getTablesByBasename,changeDB } from "@/api/index";
 import { useMessage, NIcon } from "naive-ui";
 import { uploadKnowledgeurl } from "../api/request";
 // import { useNotification } from "naive-ui";
@@ -799,7 +799,7 @@ function packgeSendMsg() {
   sendMsgContent.value = "";
   chatMsgs.value.push(body);
 
-  chatref.value.scrollBy({ top: 999999999999999, behavior: "auto" });
+  chatref.value.scrollTo({ top: 999999999999999, behavior: "auto" });
 }
 
 // 发送数据
@@ -873,6 +873,7 @@ function sendChatMsg() {
               chatref.value.scrollBy({ top: 50, behavior: "auto" });
             }
             read();
+            chatref.value.scrollTo({ top: 999999999999999, behavior: "auto" });
           })
           .catch((err) => {
             // 中断请求错误，更新状态并返回
@@ -881,7 +882,6 @@ function sendChatMsg() {
           });
       };
       read();
-      chatref.value.scrollBy({ top: 999999999999999, behavior: "auto" });
     })
     .catch((error) => {
       isSending.value = false;
@@ -957,6 +957,7 @@ function connect2DataBases() {
           }),
         children: [],
         istable: false,
+        isDB:true
       };
       for (let index = 0; index < element.children.length; index++) {
         database.children.push({
@@ -968,6 +969,7 @@ function connect2DataBases() {
             }),
           istable: true,
           children: [],
+          isDB:false,
         });
       }
       databases.push(database);
@@ -985,7 +987,16 @@ function connect2DataBases() {
 const nodeProps = ({ option }) => {
   return {
     onClick() {
-      console.log(option);
+
+      if(option.isDB){
+        let data = {
+          db_name:option.key
+        }
+        changeDB(data).then(res=>{
+          window.$message.success("选择数据库成功！");
+        })
+        return;
+      }
 
       if (option.istable) {
         let databaseName = option.key;
@@ -1005,6 +1016,7 @@ const nodeProps = ({ option }) => {
                   default: () => h(TableInsertColumn16Filled),
                 }),
               istable: false,
+              isDB:false,
             });
           }
         });

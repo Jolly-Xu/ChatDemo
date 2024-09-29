@@ -37,3 +37,11 @@ export function getTablesByBasename(data) {
 }
 
 
+
+export function changeDB(data) {
+	return request({
+		method: 'post',
+		data: data,
+		url: '/get_db_name/'
+	})
+}
