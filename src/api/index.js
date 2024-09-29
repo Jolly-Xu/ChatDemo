@@ -32,7 +32,7 @@ export function getTablesByBasename(data) {
 	return request({
 		method: 'post',
 		data: data,
-		url: '/connect_sql/'
+		url: '/select_column/'
 	})
 }
 

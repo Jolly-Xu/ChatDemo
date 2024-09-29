@@ -47,7 +47,7 @@
             </n-popselect>
           </div>
           <div class="userName" v-if="!collapsed">
-            <p>JollyXu</p>
+            <p>TestUser</p>
           </div>
         </div>
 
@@ -195,40 +195,40 @@ const menuOptions = [
     key: "chat",
     icon: renderIcon(ChatbubbleEllipsesOutline),
   },
-  {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "about",
-            params: {
-              lang: "zh-CN",
-            },
-          },
-        },
-        { default: () => "关于" }
-      ),
-    key: "a-wild-sheep-chase",
-    icon: renderIcon(BookIcon),
-  },
-  {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "settings",
-            params: {
-              lang: "zh-CN",
-            },
-          },
-        },
-        { default: () => "设置" }
-      ),
-    key: "settings",
-    icon: renderIcon(SettingsOutline),
-  },
+  // {
+  //   label: () =>
+  //     h(
+  //       RouterLink,
+  //       {
+  //         to: {
+  //           name: "about",
+  //           params: {
+  //             lang: "zh-CN",
+  //           },
+  //         },
+  //       },
+  //       { default: () => "关于" }
+  //     ),
+  //   key: "a-wild-sheep-chase",
+  //   icon: renderIcon(BookIcon),
+  // },
+  // {
+  //   label: () =>
+  //     h(
+  //       RouterLink,
+  //       {
+  //         to: {
+  //           name: "settings",
+  //           params: {
+  //             lang: "zh-CN",
+  //           },
+  //         },
+  //       },
+  //       { default: () => "设置" }
+  //     ),
+  //   key: "settings",
+  //   icon: renderIcon(SettingsOutline),
+  // },
 ];
 
 const userOptions = [

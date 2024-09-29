@@ -354,7 +354,7 @@
                 </div>
 
                 <div class="inputbox">
-                  <span>名称:</span
+                  <span>连接名:</span
                   ><n-input
                     class="inp"
                     v-model:value="databasesConnMsg.connName"
@@ -428,6 +428,9 @@
                   :data="databasesMeau"
                   :node-props="nodeProps"
                 />
+                <div class="bottomBox">
+                  <n-button tertiary round @click="databasesIsConn = false"><span>重置</span> </n-button>
+                </div>
               </div>
 
               <div class="topBox">
@@ -472,7 +475,7 @@ import MarkdownItTasklists from "markdown-it-task-lists";
 import hljs from "highlight.js/lib/common";
 import MarkdownItTOC from "markdown-it-toc-done-right";
 import mk from "markdown-it-katex";
-import { chat2test, ConnDatabases,getTablesByBasename} from "@/api/index";
+import { chat2test, ConnDatabases, getTablesByBasename } from "@/api/index";
 import { useMessage, NIcon } from "naive-ui";
 import { uploadKnowledgeurl } from "../api/request";
 // import { useNotification } from "naive-ui";
@@ -493,6 +496,12 @@ import {
   ChevronDownOutline,
   StopCircleOutline,
 } from "@vicons/ionicons5";
+
+import {
+  Database20Filled,
+  DocumentTable20Filled,
+  TableInsertColumn16Filled,
+} from "@vicons/fluent";
 
 // 标识是否聚焦到输入框，判断边框是否变换
 const changeborder = ref(true);
@@ -564,54 +573,13 @@ const databasesSel = ref([
     value: "SqlLight",
   },
   {
-    label: "Postgresql",
-    value: "postgresql",
+    label: "OpenGauss",
+    value: "opengauss",
   },
 ]);
 
 // 对话历史数据
-const chathistory = ref([
-  {
-    id: 1,
-    name: "ChatDemo",
-    content:
-      " # Math Rulez! \n  $\\sqrt{3x-1}+(1+x)^2$ \n # 一号标题 \n\n  ## 二号标题 \n\n  ### 三号标题 \n\n 这是百度的链接 [https://www.baidu.com/](https://www.baidu.com/)\n\n ```javascript \nconsole.log('hello world') \n ```  \n\n 下面是一张图片 \n\n![风景图](https://img0.baidu.com/it/u=1090967238,1582698902&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500) \n\n   ```javascript\n fuction helloWorld() {console.log('Hello, world!'); \n```",
-    avatar:
-      "https://t12.baidu.com/it/u=3889196102,199724547&fm=30&app=106&f=JPEG?w=640&h=640&s=6B243A62FEF71BB350A990CB0000A0A1",
-  },
-  {
-    id: 1,
-    name: "ChatDemo",
-    content:
-      " # Math Rulez! \n  $\\sqrt{3x-1}+(1+x)^2$ \n # 一号标题 \n\n  ## 二号标题 \n\n  ### 三号标题 \n\n 这是百度的链接 [https://www.baidu.com/](https://www.baidu.com/)\n\n ```javascript \nconsole.log('hello world') \n ```  \n\n 下面是一张图片 \n\n![风景图](https://img0.baidu.com/it/u=1090967238,1582698902&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500) \n\n   ```javascript\n fuction helloWorld() {console.log('Hello, world!'); \n```",
-    avatar:
-      "https://t12.baidu.com/it/u=3889196102,199724547&fm=30&app=106&f=JPEG?w=640&h=640&s=6B243A62FEF71BB350A990CB0000A0A1",
-  },
-  {
-    id: 1,
-    name: "ChatDemo",
-    content:
-      " # Math Rulez! \n  $\\sqrt{3x-1}+(1+x)^2$ \n # 一号标题 \n\n  ## 二号标题 \n\n  ### 三号标题 \n\n 这是百度的链接 [https://www.baidu.com/](https://www.baidu.com/)\n\n ```javascript \nconsole.log('hello world') \n ```  \n\n 下面是一张图片 \n\n![风景图](https://img0.baidu.com/it/u=1090967238,1582698902&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500) \n\n   ```javascript\n fuction helloWorld() {console.log('Hello, world!'); \n```",
-    avatar:
-      "https://t12.baidu.com/it/u=3889196102,199724547&fm=30&app=106&f=JPEG?w=640&h=640&s=6B243A62FEF71BB350A990CB0000A0A1",
-  },
-  {
-    id: 1,
-    name: "ChatDemo",
-    content:
-      " # Math Rulez! \n  $\\sqrt{3x-1}+(1+x)^2$ \n # 一号标题 \n\n  ## 二号标题 \n\n  ### 三号标题 \n\n 这是百度的链接 [https://www.baidu.com/](https://www.baidu.com/)\n\n ```javascript \nconsole.log('hello world') \n ```  \n\n 下面是一张图片 \n\n![风景图](https://img0.baidu.com/it/u=1090967238,1582698902&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500) \n\n   ```javascript\n fuction helloWorld() {console.log('Hello, world!'); \n```",
-    avatar:
-      "https://t12.baidu.com/it/u=3889196102,199724547&fm=30&app=106&f=JPEG?w=640&h=640&s=6B243A62FEF71BB350A990CB0000A0A1",
-  },
-  {
-    id: 1,
-    name: "ChatDemo",
-    content:
-      " # Math Rulez! \n  $\\sqrt{3x-1}+(1+x)^2$ \n # 一号标题 \n\n  ## 二号标题 \n\n  ### 三号标题 \n\n 这是百度的链接 [https://www.baidu.com/](https://www.baidu.com/)\n\n ```javascript \nconsole.log('hello world') \n ```  \n\n 下面是一张图片 \n\n![风景图](https://img0.baidu.com/it/u=1090967238,1582698902&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500) \n\n   ```javascript\n fuction helloWorld() {console.log('Hello, world!'); \n```",
-    avatar:
-      "https://t12.baidu.com/it/u=3889196102,199724547&fm=30&app=106&f=JPEG?w=640&h=640&s=6B243A62FEF71BB350A990CB0000A0A1",
-  },
-]);
+const chathistory = ref([]);
 
 // 对话数据
 const chatMsgs = ref([
@@ -725,14 +693,13 @@ const markdown = new MarkdownIt({
 // 当前选择模型
 const currentModel = ref("GPT-3.5");
 
-const currentMethod = ref("Agent");
+const currentMethod = ref("LLM");
 
 // 标识是否上滑的状态
 let status = true;
 
 // 树状文件
-const databasesMeau = ref([
-]);
+const databasesMeau = ref([]);
 
 // 窗口状态判断，是否上滑动作，停止自动向下滑
 function scrollEevent(event) {
@@ -806,6 +773,10 @@ function send_ready(event) {
         window.$message.warning("请等待问题回答完毕后，再继续提问！");
         return;
       }
+      if ( databasesIsConn.value == false){
+        window.$message.warning("请先在侧边栏工具中连接数据库！");
+        return;
+      }
       sendChatMsg();
     }
   }
@@ -815,7 +786,7 @@ function send_ready(event) {
 function packgeSendMsg() {
   let body = {
     id: 11,
-    name: "JollyXu",
+    name: "TestUser",
     content: sendMsgContent.value,
     avatar:
       "https://img0.baidu.com/it/u=1450269893,1819089861&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=800",
@@ -848,6 +819,7 @@ function sendChatMsg() {
     content: sendMsgContent.value,
     userid: "1767767",
   };
+
   packgeSendMsg();
   // 获取两个变量
   const [func, c] = chat2test(requestbody);
@@ -909,6 +881,7 @@ function sendChatMsg() {
           });
       };
       read();
+      chatref.value.scrollBy({ top: 999999999999999, behavior: "auto" });
     })
     .catch((error) => {
       isSending.value = false;
@@ -964,36 +937,40 @@ const databasesConnMsg = ref({
   password: "",
 });
 
+// 连接数据库
 function connect2DataBases() {
   ConnDatabases(databasesConnMsg.value).then((res) => {
     let r = res.data;
-    console.log(r);
-    
+
     let s = "" + r;
     s = s.replaceAll(/'/g, '"');
     let data = JSON.parse(s);
-    let databases = [
-      {
-        key: data.key,
-        label: data.key,
+    let databases = [];
+    for (let index1 = 0; index1 < data.length; index1++) {
+      const element = data[index1];
+      let database = {
+        key: data[index1].key,
+        label: data[index1].key,
         prefix: () =>
           h(NIcon, null, {
-            default: () => h(Folder),
+            default: () => h(Database20Filled),
           }),
         children: [],
-      },
-    ];
-
-    for (let index = 0; index < data.children.length; index++) {
-      databases[0].children.push({
-        key: data.children[index],
-        label: data.children[index],
-        prefix: () =>
-          h(NIcon, null, {
-            default: () => h(Folder),
-          }),
-          children:[]
-      });
+        istable: false,
+      };
+      for (let index = 0; index < element.children.length; index++) {
+        database.children.push({
+          key: element.children[index],
+          label: element.children[index],
+          prefix: () =>
+            h(NIcon, null, {
+              default: () => h(DocumentTable20Filled),
+            }),
+          istable: true,
+          children: [],
+        });
+      }
+      databases.push(database);
     }
 
     databasesMeau.value = databases;
@@ -1004,20 +981,34 @@ function connect2DataBases() {
 
 // 数据库树状结构绑定属性（点击事件）
 
-// const
-
+// 点击数据库表
 const nodeProps = ({ option }) => {
   return {
     onClick() {
-      let databaseName = option.key
-      let data = {
-        databaseName:databaseName
+      console.log(option);
+
+      if (option.istable) {
+        let databaseName = option.key;
+        let data = {
+          table: databaseName,
+        };
+        getTablesByBasename(data).then((res) => {
+          let array = res.data.columns;
+          option.children = []
+          for (let index = 0; index < array.length; index++) {
+            const element = array[index];
+            option.children.push({
+              key: element,
+              label: element,
+              prefix: () =>
+                h(NIcon, null, {
+                  default: () => h(TableInsertColumn16Filled),
+                }),
+              istable: false,
+            });
+          }
+        });
       }
-      getTablesByBasename(data).then(res=>{
-          console.log(res);
-      })
-      console.log(databaseName);
-      
     },
   };
 };
