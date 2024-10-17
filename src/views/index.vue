@@ -22,7 +22,7 @@
                         />
                         <div class="carouselItem_footer">
                           <div>
-                            请你分析当下都市打工年轻人下班后的户外运动风潮，包括游泳骑行等经典项目以及飞盘、腰旗橄榄球等新兴项目，结合社会背景，经济状况等分析这种热潮产生的原因，并为想要加入户外运动的年轻人提供一些可行的建议
+                            查找年龄大于20岁且GPA大于3.5的学生名字
                           </div>
                         </div>
                       </n-carousel-item>
@@ -33,7 +33,7 @@
                         />
                         <div class="carouselItem_footer">
                           <div>
-                            我是一名做用户增长的互联网产品经理，帮我写一个年中总结，主要围绕我的工作成绩，要体现我对业务的反思和下半年的规划
+                            列出所有计算机科学专业学生的名字和GPA
                           </div>
                         </div>
                       </n-carousel-item>
@@ -44,7 +44,7 @@
                         />
                         <div class="carouselItem_footer">
                           <div>
-                            毕业致谢仅有8个字，却把导师“捧”出新高度，网友：情商太高
+                            找出年龄小于等于22岁且名字以字母'A'开头的学生的ID和年龄
                           </div>
                         </div>
                       </n-carousel-item>
@@ -54,7 +54,7 @@
                           src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel4.jpeg"
                         />
                         <div class="carouselItem_footer">
-                          <div>css怎么给边框加上模糊效果</div>
+                          <div>列出GPA最高的学生的所有信息</div>
                         </div>
                       </n-carousel-item>
                     </n-carousel>
@@ -293,7 +293,7 @@
                   <!-- <n-icon size="20" :component="Add"> </n-icon> -->
                 </div>
               </div>
-              <div class="newchat_box">
+              <div class="newchat_box" v-if="chathistory.length!=0">
                 <n-infinite-scroll
                   style="height: 100%"
                   :distance="10"
@@ -305,11 +305,14 @@
                     class="chat_item"
                   >
                     <div class="left_tag"></div>
-                    <div class="content">
+                    <div class="content" @click="openHistoryChat(msg.id)">
                       {{ msg.content }}
                     </div>
                   </div>
                 </n-infinite-scroll>
+              </div>
+              <div class="newchat_box_default" v-else>
+                <span>暂无历史对话数据</span>
               </div>
             </div>
           </n-tab-pane>
@@ -475,7 +478,7 @@ import MarkdownItTasklists from "markdown-it-task-lists";
 import hljs from "highlight.js/lib/common";
 import MarkdownItTOC from "markdown-it-toc-done-right";
 import mk from "markdown-it-katex";
-import { chat2test, ConnDatabases, getTablesByBasename,changeDB } from "@/api/index";
+import { chat2test, ConnDatabases, getTablesByBasename,changeDB,getHistory,openhistory } from "@/api/index";
 import { useMessage, NIcon } from "naive-ui";
 import { uploadKnowledgeurl } from "../api/request";
 // import { useNotification } from "naive-ui";
@@ -579,7 +582,19 @@ const databasesSel = ref([
 ]);
 
 // 对话历史数据
-const chathistory = ref([]);
+const chathistory = ref([
+]);
+
+// 加载历史对话数据
+function openHistoryChat(id){
+  openhistory(id).then(res=>{
+    console.log(res);
+    chatMsgs.length = 0;
+    chatMsgs.value = res.data.result
+    databasesIsConn.value = true
+  })
+}
+
 
 // 对话数据
 const chatMsgs = ref([
@@ -1029,6 +1044,12 @@ export default defineComponent({
   setup() {
     onMounted(() => {
       initClipboard();
+      getHistory().then(res=>{
+        let data = res.data.result;
+        chathistory.value = data
+        console.log(data);
+        
+      })
     });
     window.$message = useMessage();
 
@@ -1040,6 +1061,7 @@ export default defineComponent({
       uploadKnowledge,
       nodeProps,
       changeborder,
+      openHistoryChat,
       chatref,
       Navigate,
       handleLoad,

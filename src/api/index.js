@@ -1,5 +1,5 @@
 // index 页面的api请求
-const baseFetchUrl = "http://10.32.22.196:8000"
+const baseFetchUrl = "/api"
 import request from "./request";
 
 export function chat2test(data) {
@@ -43,5 +43,23 @@ export function changeDB(data) {
 		method: 'post',
 		data: data,
 		url: '/get_db_name/'
+	})
+}
+
+
+export function getHistory() {
+	return request({
+		method: 'GET',
+		url: '/history_message/'
+	})
+}
+
+export function openhistory(id) {
+	return request({
+		method: 'POST',
+		data:{
+			id:id
+		},
+		url: '/choose_chat/'
 	})
 }

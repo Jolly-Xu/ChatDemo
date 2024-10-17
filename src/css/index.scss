@@ -489,6 +489,18 @@
             background-color: #f3f3f5;
           }
         }
+
+        .newchat_box_default{
+          display: flex;
+          width: 100%;
+          justify-content: center;
+          border-top: 1px solid #eae9e9;
+          margin-top: 1rem;
+          span{
+              line-height: 2rem;
+              color: #6c6b6b;
+          }
+        }
       }
 
       .databasesBox {
